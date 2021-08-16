@@ -1,0 +1,261 @@
+﻿<Window x:Class="WpfApp12.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp12"
+        xmlns:jsonViewer="clr-namespace:JsonViewerDemo.JsonViewer"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="1200"
+        Width="1200"
+        WindowState="Maximized">
+    <TabControl SelectionChanged="Selector_OnSelectionChanged">
+        <TabItem Header="Public keys">
+            <StackPanel Orientation="Vertical" Margin="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="100" />
+
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Public key urls - Sweden:" />
+                    <TextBox x:Name="TbPublicKeyUrlSW"
+                             VerticalContentAlignment="Center"
+                             Grid.Column="1"
+                             Text="https://dgcg.covidbevis.se/tp/trust-list" />
+                    <Button Grid.Column="2"
+                            Click="BtnGetKeysSWClick">
+                        Get SW Certs
+                    </Button>
+                    <Button Grid.Column="3"
+                            Click="BtnCheckSWCertsClick">
+                        Check SW Certs
+                    </Button>
+
+                    <!--<Button Grid.Column="4"
+                    Click="BtnSWProofClick">Proof SW Cert</Button>-->
+
+                </Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Public key urls - Austria:" Width="150" />
+                    <TextBox x:Name="TbPublicKeyUrlAT"
+                             VerticalContentAlignment="Center"
+                             Text="https://dgc-trust.qr.gv.at/trustlist"
+                             Width="300" />
+                    <Button Click="BtnGetKeysATClick" Width="100">Get AT Certs</Button>
+                    <Button Click="BtnCheckATCertsClick" Width="100">Check AT Certs</Button>
+                </StackPanel>
+                <Label Content="Keys in JSON format:" />
+                <jsonViewer:JsonViewer x:Name="JsonCerts"
+                                       Height="500" />
+                <Label Content="Output:" />
+                <ScrollViewer Height="200">
+                    <TextBox x:Name="TbPublicKeys"
+                             IsEnabled="False"
+                             TextWrapping="Wrap" />
+                </ScrollViewer>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="QR code checker">
+            <StackPanel Orientation="Vertical"
+                        Margin="3">
+
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="100" />
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Scanned QR code:" />
+                    <ComboBox x:Name="CbQrCodes" DisplayMemberPath="Name"
+                              SelectionChanged="CbQrCodes_OnSelectionChanged" />
+                    <TextBox x:Name="TbQrCode"
+                             VerticalContentAlignment="Center"
+                             Grid.Column="1" />
+                    <Button Click="BtnAnalyzeClick"
+                            Grid.Column="2"
+                            Content="Analyze" />
+                    <Button Click="BtnClearClick"
+                            Grid.Column="3"
+                            Content="Clear" />
+                </Grid>
+
+                <Expander Header="Original Json Content (Payload)"
+                          IsExpanded="True">
+                    <jsonViewer:JsonViewer x:Name="JsonOriginalQr"
+                                           Height="250" />
+                </Expander>
+
+                <!--<Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+
+                    <Label Content="Original Json Content (Payload):" />
+                   
+                </Grid>-->
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="500" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="100" />
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Sign1 Cose Message (Header(Protected Map: Algo,KID), Payload, Signature):" />
+                    <TextBox x:Name="TbProtectedMap"
+                             VerticalContentAlignment="Center"
+                             Grid.Column="1" />
+                    <TextBox x:Name="TbCosePayload"
+                             VerticalContentAlignment="Center"
+                             Grid.Column="2" />
+                    <TextBox x:Name="TbCoseSignature"
+                             VerticalContentAlignment="Center"
+                             Grid.Column="3" />
+                    <Button Click="BtnJsonAtClick"
+                            Grid.Column="4"
+                            Content="Json" />
+                    <!--<Button Click="BtnJsonAtBackClick"
+                            Grid.Column="5"
+                            Content="Json Back" />-->
+
+                </Grid>
+
+                <ScrollViewer Height="100">
+                    <TextBox x:Name="TbQRObjectData"
+                             IsEnabled="True"
+                             TextWrapping="Wrap" />
+                </ScrollViewer>
+
+                <Grid Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Modified Payload:" />
+                    <TextBox x:Name="TbCosePayloadModified"
+                             Grid.Column="1"
+                             VerticalContentAlignment="Center" />
+                </Grid>
+
+                <Grid Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Modified Json Content (Payload):" />
+                    <jsonViewer:JsonViewer x:Name="JsonModifiedContent"
+                                           Grid.Row="1"
+                                           Height="250" />
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Margin="0 10">
+                    <Button Click="BtnVerifyAtClick"
+                            Width="200"
+                            Margin="0 0 10 0"
+                            Content="Verify (Austrian)" />
+                    <Button Click="BtnVerifySwClick"
+                            Width="200"
+                            Content="Verify (Sweden)" />
+                    <Grid Height="30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Verified:" />
+                        <Image Grid.Column="1"
+                               x:Name="resImg" />
+                    </Grid>
+                </StackPanel>
+
+                <Grid Margin="0 10" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                            Click="BtnVerifyModifiedJson"
+                            Content="Verify With Modified Payload"
+                            Height="30"
+                            Margin="0 0 10 0"
+                            Width="200" />
+                    <Button Grid.Column="1"
+                            x:Name="btnBruteForce"
+                            Click="BtnBruteForceClick"
+                            Content="Start Brute Force"
+                            Height="30"
+                            Margin="0 0 10 0"
+                            Width="200" />
+                    <Button Grid.Column="2"
+                            Click="BtnShowCounter"
+                            Content="Show Number of trying"
+                            Height="30"
+                            Margin="0 0 10 0"
+                            Width="200" />
+                    <Button Grid.Column="3"
+                            x:Name="btnBruteForceParallel"
+                            Click="BtnBruteForceParallelClick"
+                            Content="Start Brute Force (Parallel)"
+                            Height="30"
+                            Margin="0 0 10 0"
+                            Width="200" />
+                    <Button Grid.Column="4"
+                            x:Name="btnBruteForceStop"
+                            Click="BtnBruteForceStopClick"
+                            Content="Stop Brute force"
+                            Height="30"
+                            Margin="0 0 10 0"
+                            Width="200" />
+                </Grid>
+            </StackPanel>
+        </TabItem>
+        <TabItem x:Name="TabCertMaker" Header="Certificate maker">
+            <StackPanel Orientation="Vertical">
+                <Label Content="CWT values:" />
+                <StackPanel Orientation="Horizontal" Height="Auto" Margin="0 10">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Issuer" />
+                        <TextBox Name="tbIssuer" Text="AT" VerticalContentAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Issue At" />
+                        <DatePicker Name="tbIssueAt" Text="2022.05.13" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Expiration Time" />
+                        <DatePicker Name="tbExpirationTime" Text="2021.06.19" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="KID" />
+                        <TextBox Name="tbKID" Text="Is2JtrOJhik=" VerticalContentAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+                <Label
+                    Content="Value set JSON files (Source: https://raw.githubusercontent.com/sondaica/ehn-dcc-schema/v1.3.0/valuesets/**.json) :" />
+                <ComboBox x:Name="cbValueSets" SelectionChanged="CbValueSets_OnSelectionChanged" Margin="0 0 0 10"/>
+
+                <jsonViewer:JsonViewer x:Name="JsonViewerValueSets" />
+            </StackPanel>
+        </TabItem>
+
+    </TabControl>
+
+</Window>
